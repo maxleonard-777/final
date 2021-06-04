@@ -1,5 +1,5 @@
 // Goal: Provide a function to return all holdings from Firebase for a given user of our choice.
-
+//***Should this be under node modules rather than netlify functions? */
 // allows us to use firebase
 let firebase = require(`./firebase`)
 
@@ -37,8 +37,12 @@ let orders = ordersQuery.docs
       quantity: orderData.quantity,
       buy: orderData.buy,
       salePrice: orderData.salePrice,
-      assetId: orderData.assetId,
-      userId: orderData.userId
+      assetId: orderData.assetId, // where do we want to source this from? with current setup i believe this would need to be an input
+      userId: orderData.userId,
+      // adding ticker, company name, transaction date to previous work - Rob 6/4/21
+      ticker:orderData.ticker,
+      companyName:orderData.companyName,
+      transactionDate:orderData.transactionDate
     }
 
     // add the Object to the return value
