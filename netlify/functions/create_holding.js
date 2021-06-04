@@ -29,7 +29,7 @@ exports.handler = async function(event) {
             salePrice = salePrice,
             created: firebase.firestore.FieldValue.serverTimestamp()
         })
-  
+
     return {
       statusCode: 200
     }

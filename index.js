@@ -44,17 +44,21 @@ firebase.auth().onAuthStateChanged(async function(user) {
       let salePrice = positionInput.salePrice.value
       console.log(ticker)
      
-      // Build the URL for our order API
+            // Build the URL for our order API
       let url = `.netlify/functions/create_holding?ticker=${ticker}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
+      console.log(url)
+      // // // Fetch the url, wait for a response, store the response in memory
+      // let response = await fetch(url)
+      // console.log(response)
 
-      // // Fetch the url, wait for a response, store the response in memory
-      let response = await fetch(url)
-      console.log(response)
-
-      // // refresh the page
-      location.reload()
+      // // // refresh the page
+      // location.reload()
 
       // //End create position / order area
+
+      // YTD performance calculations code goes here, need to loop through data
+
+
     })
 
   } else {
