@@ -11,6 +11,72 @@
 
 <body>
   <div class="sign-in-or-sign-out"></div>
+
+  <!-- Order Section -->
+  <div class="flex flex-row">
+    <div class="flex w-2/3 flex-col">
+      <div class="my-2 underline text-xl bold">
+        Add an Order
+      </div>
+      <div>
+        <form id ="new-order" class="flex-container">
+          <input type="text" id="ticker" name="ticker" placeholder="Ticker" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
+          <input type="text" id="company-name" name="company-name" placeholder="Company Name" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
+          <input type="text" id="transaction-date" name="transaction-date" placeholder="Transaction Date" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
+          <input type="text" id="average-purchase-price" name="average-purchase-price" placeholder="Average Purchase Price" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
+          <input type="text" id="transaction-quantity" name="transaction-quantity" placeholder="Quantity" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
+          <input type="text" id="current-price" name="current-price" placeholder="Current Price" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
+          <input type="text" id="order-type" name="order-type" placeholder="Order Type" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
+          <input type="text" id="sale-price" name="sale-price" placeholder="Sale Price" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
+          <button id="add-position-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl text-xs ">Add Position</button>
+        </form>
+      </div>
+
+      <!-- Executed Order section -->
+      <div class="my-2 underline text-xl bold">
+        Previous Orders
+      </div>
+      <div class="table w-full ">
+        <div class="table-row-group">
+          <div class="table-row" id="table-header">
+            <div class="table-cell underline" id="ticker-table-header">Ticker</div>
+            <div class="table-cell underline" id="company-name-table-header">Company Name</div>
+            <div class="table-cell underline" id="transaction-date-table-header">Transaction Date</div>
+            <div class="table-cell underline" id="purchase-price-table-header">Purchase Price</div>
+            <div class="table-cell underline" id="order-type-table-header">Order Type</div>
+            <div class="table-cell underline" id="sale-price-table-header">Sale Price</div>
+          </div>
+          <div class="table-row">
+            <!-- Fill in orders with backend below, example shown here as reference only -->
+            <div class="table-cell" id="ticker-table-cell">GIS</div>
+            <div class="table-cell" id="company-name-table-cell">General Mills</div>
+            <div class="table-cell" id="transaction-date-table-cell">6/3/21</div>
+            <div class="table-cell" id="transaction-price-table-cell">57</div>
+            <div class="table-cell" id="order-type-table-cell">BUY</div>
+            <div class="table-cell" id="sale-price-table-cell">N/A</div>
+          </div>
+        </div>
+      </div>
+      <div>
+
+      </div>
+    </div>
+
+    <!-- Overall Performance section -->
+    <div class="flex w-1/3 flex-col" id="year-to-date-performance">
+      <div class="underline text-xl bold">
+        Year To Date Performance
+      </div>
+      <div> 
+        test 1
+      </div>
+      <div>
+        test 2
+      </div>
+    </div>
+  
+  </div>
+
  
   <!-- Put the Firebase config here -->
   <!-- The core Firebase JS SDK is always required and must be listed first -->
