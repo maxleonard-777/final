@@ -6,7 +6,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
     document.querySelector(`.sign-in-or-sign-out`).innerHTML = `
     <button class="text-blue-500 underline sign-out">Sign Out</button>
     `
-
+  
     // get a reference to the sign out button
     let signOutButton = document.querySelector(`.sign-out`)
 
@@ -36,8 +36,9 @@ firebase.auth().onAuthStateChanged(async function(user) {
 
       // get the contents on the inputs
       let ticker = positionInput.ticker.value
+      let userId = user.uid
       let companyName = positionInput.companyName.value
-      let transactionDate = positionInput.transactionDate.value
+      let transactionDate = "2021-06-02"
       let avgPurchasePrice = positionInput.avgPurchasePrice.value
       let quantity = positionInput.quantity.value
       let buy = positionInput.buy.value
@@ -45,13 +46,14 @@ firebase.auth().onAuthStateChanged(async function(user) {
       console.log(ticker)
      
             // Build the URL for our order API
-      let url = `.netlify/functions/create_holding?ticker=${ticker}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
-      console.log(url)
-      // // // Fetch the url, wait for a response, store the response in memory
-      // let response = await fetch(url)
-      // console.log(response)
+      let url = `/.netlify/functions/create_holding?ticker=${ticker}&userId=${userId}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
 
-      // // // refresh the page
+      console.log(url)
+      // // Fetch the url, wait for a response, store the response in memory
+      let response = await fetch(url)
+      console.log(response)
+
+      // // refresh the page
       // location.reload()
 
       // //End create position / order area
@@ -79,7 +81,4 @@ firebase.auth().onAuthStateChanged(async function(user) {
     // Starts FirebaseUI Auth
     ui.start('.sign-in-or-sign-out', authUIConfig)
   }
-
-  let test = 1
-  console.log(test)
 })

@@ -8,6 +8,7 @@ exports.handler = async function(event) {
   
     // get all query string parameters and store in memory
     let ticker = event.queryStringParameters.ticker
+    let userId = event.queryStringParameters.userId
     let companyName = event.queryStringParameters.companyName
     let transactionDate = event.queryStringParameters.transactionDate
     let avgPurchasePrice = event.queryStringParameters.avgPurchasePrice
@@ -20,13 +21,14 @@ exports.handler = async function(event) {
   
         // create a new holding
         db.collection(`order`).add({
-            ticker = ticker,
-            companyName = companyName,
-            transactionDate = transactionDate,
-            avgPurchasePrice = avgPurchasePrice,
-            quantity = quantity,
-            buy = buy,
-            salePrice = salePrice,
+            ticker: ticker,
+            userId: userId, 
+            companyName: companyName,
+            transactionDate: transactionDate,
+            avgPurchasePrice: avgPurchasePrice,
+            quantity: quantity,
+            buy: buy,
+            salePrice: salePrice,
             created: firebase.firestore.FieldValue.serverTimestamp()
         })
 
