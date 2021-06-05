@@ -19,7 +19,7 @@ exports.handler = async function(event) {
     let db = firebase.firestore()
   
         // create a new holding
-        db.collection(`holdings`).add({
+        db.collection(`order`).add({
             ticker = ticker,
             companyName = companyName,
             transactionDate = transactionDate,
