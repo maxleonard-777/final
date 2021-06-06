@@ -48,83 +48,94 @@ firebase.auth().onAuthStateChanged(async function(user) {
       let salePrice = positionInput.salePrice.value
       //console.log(ticker)
      
-            // Build the URL for our order API
-      let url = `/.netlify/functions/create_holding?ticker=${ticker}&userId=${userId}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
+      // Build the URL for our order API
+      //let url = `/.netlify/functions/create_holding?ticker=${ticker}&userId=${userId}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
       //console.log(url)
+      let url = `/.netlify/functions/holdings?userId=${userId}`
 
       // // Fetch the url, wait for a response, store the response in memory
       let response = await fetch(url)
+
+      let json = await response.json()
+      //console.log(json)
       
       // grab reference to previous order area
       let ordersDiv = document.querySelector(`#previousOrders`)
 
+      //Loop through JSON data for each object 
+
+      for (let i = 0; i < json.length; i++) {
+        let order = json[i]
+
+        ordersDiv.insertAdjacentHTML(`beforeend`,`
+        <div class="table-row holding">
+        <!-- Fill in orders with backend below, example shown here as reference only -->
+            <tr style="text-align:center">
+              <td class="table-cell center" id="ticker-table-cell">${order.ticker}</td>
+              <td class="table-cell" id="company-name-table-cell">${order.companyName}</td>
+              <td class="table-cell" id="transaction-date-table-cell">${order.transactionDate}</td>
+              <td class="table-cell" id="transaction-price-table-cell">${order.avgPurchasePrice}</td>
+              <td class="table-cell" id="quantity-table-cell">${order.quantity}</td>
+              <td class="table-cell" id="order-type-table-cell">${order.buy}</td>
+              <td class="table-cell" id="sale-price-table-cell">${order.salePrice}</td>
+            </tr>
+        </div>
+        `)
+
+       // conditional for buy order, no sell
+        if (isNaN(order.avgPurchasePrice) == false && order.quantity > 0 && isNaN(order.costBasis) == false) {
+          costBasis = order.costBasis + order.quantity*order.avgPurchasePrice
+        }
+
+        //conditional for sell order, no buy
+        if (isNaN(salePrice) == false && order.quantity > 0 && isNaN(order.avgPurchasePrice) == true) {
+          totalProceeds = totalProceeds + order.quantity*salePrice
+        }
+
+        // conditional for buy and sell in same order
+
+        if (isNaN(salePrice) == false && salePrice > 0 && order.quantity > 0 && isNaN(order.avgPurchasePrice) == false) {
+          costBasis = order.costBasis + order.quantity*order.avgPurchasePrice
+          totalProceeds = totalProceeds + order.quantity*salePrice
+        }
+        
+        netReturns = totalProceeds - costBasis
+        //replace return divs with info above
+
+        let costBasisHTML = document.querySelector('.costBasis')
+        costBasisHTML.innerHTML = `
+        <div class="costBasis"> 
+        Total Investment Amount ($) = ${costBasis}
+        </div>
+        `
+        let totalProceedsHTML = document.querySelector('.totalProceeds')
+        totalProceedsHTML.innerHTML = `
+        <div class="totalProceeds"> 
+        Total Proceeds from Investments ($) = ${totalProceeds}
+        </div>
+        `
+
+        let netReturnsHTML = document.querySelector('.netReturns')
+        netReturnsHTML.innerHTML = `
+        <div class="netReturns"> 
+        Net Returns ($) = ${netReturns}
+        </div>
+        `
+      }
+
+      }
+
       //create some markup, insert data into the area
       
-      ordersDiv.insertAdjacentHTML(`beforeend`,`
-      <div class="table-row holding">
-      <!-- Fill in orders with backend below, example shown here as reference only -->
-      <tr style="text-align:center">
-        <td class="table-cell center" id="ticker-table-cell">${ticker}</td>
-        <td class="table-cell" id="company-name-table-cell">${companyName}</td>
-        <td class="table-cell" id="transaction-date-table-cell">${transactionDate}</td>
-        <td class="table-cell" id="transaction-price-table-cell">${avgPurchasePrice}</td>
-        <td class="table-cell" id="quantity-table-cell">${quantity}</td>
-        <td class="table-cell" id="order-type-table-cell">${buy}</td>
-        <td class="table-cell" id="sale-price-table-cell">${salePrice}</td>
-      </tr>
-    </div>
-      `)
+      
 
     // //End create position / order area
 
     // YTD performance calculations code goes here, need to loop through table and make calculations
 
 
-      // conditional for buy order, no sell
-    if (isNaN(avgPurchasePrice) == false && quantity > 0 && isNaN(costBasis) == false) {
-      costBasis = costBasis + quantity*avgPurchasePrice
-    }
-
-    //conditional for sell order, no buy
-    if (isNaN(salePrice) == false && quantity > 0 && isNaN(avgPurchasePrice) == true) {
-      totalProceeds = totalProceeds + quantity*salePrice
-    }
-
-    // conditional for buy and sell in same order
-
-    if (isNaN(salePrice) == false && salePrice > 0 && quantity > 0 && isNaN(avgPurchasePrice) == false) {
-      costBasis = costBasis + quantity*avgPurchasePrice
-      totalProceeds = totalProceeds + quantity*salePrice
-    }
-    
-    netReturns = totalProceeds - costBasis
-
-
-
-    //replace return divs with info above
-
-    let costBasisHTML = document.querySelector('.costBasis')
-    costBasisHTML.innerHTML = `
-    <div class="costBasis"> 
-    Total Investment Amount ($) = ${costBasis}
-    </div>
-    `
-    let totalProceedsHTML = document.querySelector('.totalProceeds')
-    totalProceedsHTML.innerHTML = `
-    <div class="totalProceeds"> 
-    Total Proceeds from Investments ($) = ${totalProceeds}
-    </div>
-    `
-
-    let netReturnsHTML = document.querySelector('.netReturns')
-    netReturnsHTML.innerHTML = `
-    <div class="netReturns"> 
-    Net Returns ($) = ${netReturns}
-    </div>
-    `
-  }
+     
   )
-
   } else {
     // Signed out
     console.log('signed out')
