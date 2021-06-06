@@ -119,7 +119,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
     let netReturnsHTML = document.querySelector('.netReturns')
     netReturnsHTML.innerHTML = `
     <div class="netReturns"> 
-    Total Proceeds from Investments ($) = ${netReturns}
+    Net Returns ($) = ${netReturns}
     </div>
     `
   }
