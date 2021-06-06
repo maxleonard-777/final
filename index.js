@@ -20,6 +20,9 @@ firebase.auth().onAuthStateChanged(async function(user) {
     })
 
     // Create Position/Order Area
+    let costBasis = 0
+    let totalProceeds = 0
+    let netReturns = 0
 
     // get a reference to the Add Position button
     let addPositionButton = document.querySelector(`#add-position-button`)
@@ -43,7 +46,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
       let quantity = positionInput.quantity.value
       let buy = positionInput.buy.value
       let salePrice = positionInput.salePrice.value
-      console.log(ticker)
+      //console.log(ticker)
      
             // Build the URL for our order API
       let url = `/.netlify/functions/create_holding?ticker=${ticker}&userId=${userId}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
@@ -76,8 +79,49 @@ firebase.auth().onAuthStateChanged(async function(user) {
 
     // YTD performance calculations code goes here, need to loop through table and make calculations
 
-  
+
+      // conditional for buy order, no sell
+    if (isNaN(avgPurchasePrice) == false && quantity > 0 && isNaN(costBasis) == false) {
+      costBasis = costBasis + quantity*avgPurchasePrice
+    }
+
+    //conditional for sell order, no buy
+    if (isNaN(salePrice) == false && quantity > 0 && isNaN(avgPurchasePrice) == true) {
+      totalProceeds = totalProceeds + quantity*salePrice
+    }
+
+    // conditional for buy and sell in same order
+
+    if (isNaN(salePrice) == false && salePrice > 0 && quantity > 0 && isNaN(avgPurchasePrice) == false) {
+      costBasis = costBasis + quantity*avgPurchasePrice
+      totalProceeds = totalProceeds + quantity*salePrice
+    }
     
+    netReturns = totalProceeds - costBasis
+
+
+
+    //replace return divs with info above
+
+    let costBasisHTML = document.querySelector('.costBasis')
+    costBasisHTML.innerHTML = `
+    <div class="costBasis"> 
+    Total Investment Amount ($) = ${costBasis}
+    </div>
+    `
+    let totalProceedsHTML = document.querySelector('.totalProceeds')
+    totalProceedsHTML.innerHTML = `
+    <div class="totalProceeds"> 
+    Total Proceeds from Investments ($) = ${totalProceeds}
+    </div>
+    `
+
+    let netReturnsHTML = document.querySelector('.netReturns')
+    netReturnsHTML.innerHTML = `
+    <div class="netReturns"> 
+    Total Proceeds from Investments ($) = ${netReturns}
+    </div>
+    `
   }
   )
 
