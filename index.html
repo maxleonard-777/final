@@ -28,6 +28,7 @@
           <input type="text" id="buy" name="buy" placeholder="Order Type" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
           <input type="text" id="salePrice" name="salePrice" placeholder="Sale Price" class=" text-xs my-2 p-2 w-24 border border-gray-400 rounded shadow-m ">
           <button id="add-position-button" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl text-xs ">Add Position</button>
+
         </form>
       </div>
 
@@ -35,29 +36,31 @@
       <div class="my-2 underline text-xl bold">
         Previous Orders
       </div>
-      <div class="table w-full" id="previousOrders">
+      <table class="table w-full" id="previousOrders">
         <div class="table-row-group">
           <div class="table-row" id="table-header">
-            <div class="table-cell underline" id="ticker-table-header">Ticker</div>
-            <div class="table-cell underline" id="company-name-table-header">Company Name</div>
-            <div class="table-cell underline" id="transaction-date-table-header">Transaction Date</div>
-            <div class="table-cell underline" id="purchase-price-table-header">Purchase Price</div>
-            <div class="table-cell underline" id="purchase-price-table-header">Quantity</div>
-            <div class="table-cell underline" id="order-type-table-header">Order Type</div>
-            <div class="table-cell underline" id="sale-price-table-header">Sale Price</div>
+            <th class="table-cell underline" id="ticker-table-header">Ticker</th>
+            <th class="table-cell underline" id="company-name-table-header">Company Name</th>
+            <th class="table-cell underline" id="transaction-date-table-header">Transaction Date</th>
+            <th class="table-cell underline" id="purchase-price-table-header">Purchase Price</th>
+            <th class="table-cell underline" id="purchase-price-table-header">Quantity</th>
+            <th class="table-cell underline" id="order-type-table-header">Order Type</th>
+            <th class="table-cell underline" id="sale-price-table-header">Sale Price</th>
           </div>
-          <div class="table-row holding">
-            <!-- Fill in orders with backend below, example shown here as reference only -->
-            <div class="table-cell" id="ticker-table-cell">GIS</div>
-            <div class="table-cell" id="company-name-table-cell">General Mills</div>
-            <div class="table-cell" id="transaction-date-table-cell">6/3/21</div>
-            <div class="table-cell" id="transaction-price-table-cell">57</div>
-            <div class="table-cell" id="quantity-table-cell">100</div>
-            <div class="table-cell" id="order-type-table-cell">BUY</div>
-            <div class="table-cell" id="sale-price-table-cell">N/A</div>
-          </div>
+          <!-- Comment out placeholder for holdings -->
+          <!-- <div class="table-row holding">
+            <tr style="text-align:center">
+              <td class="table-cell center" id="ticker-table-cell">GIS</td>
+              <td class="table-cell" id="company-name-table-cell">General Mills</td>
+              <td class="table-cell" id="transaction-date-table-cell">6/3/21</td>
+              <td class="table-cell" id="transaction-price-table-cell">57</td>
+              <td class="table-cell" id="quantity-table-cell">100</td>
+              <td class="table-cell" id="order-type-table-cell">BUY</td>
+              <td class="table-cell" id="sale-price-table-cell">N/A</td>
+            </tr>
+          </div> -->
         </div>
-      </div>
+      </table>
       <div>
         
       </div>

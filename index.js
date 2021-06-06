@@ -38,7 +38,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
       let ticker = positionInput.ticker.value
       let userId = user.uid
       let companyName = positionInput.companyName.value
-      let transactionDate = "2021-06-02"
+      let transactionDate = positionInput.transactionDate.value
       let avgPurchasePrice = positionInput.avgPurchasePrice.value
       let quantity = positionInput.quantity.value
       let buy = positionInput.buy.value
@@ -47,21 +47,39 @@ firebase.auth().onAuthStateChanged(async function(user) {
      
             // Build the URL for our order API
       let url = `/.netlify/functions/create_holding?ticker=${ticker}&userId=${userId}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
+      //console.log(url)
 
-      console.log(url)
       // // Fetch the url, wait for a response, store the response in memory
       let response = await fetch(url)
-      console.log(response)
+      
+      // grab reference to previous order area
+      let ordersDiv = document.querySelector(`#previousOrders`)
 
-      // // refresh the page
-      // location.reload()
+      //create some markup, insert data into the area
+      
+      ordersDiv.insertAdjacentHTML(`beforeend`,`
+      <div class="table-row holding">
+      <!-- Fill in orders with backend below, example shown here as reference only -->
+      <tr style="text-align:center">
+        <td class="table-cell center" id="ticker-table-cell">${ticker}</td>
+        <td class="table-cell" id="company-name-table-cell">${companyName}</td>
+        <td class="table-cell" id="transaction-date-table-cell">${transactionDate}</td>
+        <td class="table-cell" id="transaction-price-table-cell">${avgPurchasePrice}</td>
+        <td class="table-cell" id="quantity-table-cell">${quantity}</td>
+        <td class="table-cell" id="order-type-table-cell">${buy}</td>
+        <td class="table-cell" id="sale-price-table-cell">${salePrice}</td>
+      </tr>
+    </div>
+      `)
 
-      // //End create position / order area
+    // //End create position / order area
 
-      // YTD performance calculations code goes here, need to loop through data
+    // YTD performance calculations code goes here, need to loop through table and make calculations
 
-
-    })
+  
+    
+  }
+  )
 
   } else {
     // Signed out
