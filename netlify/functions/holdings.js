@@ -33,7 +33,7 @@ let orders = ordersQuery.docs
     // create an Object to be added to the return value of our lambda
     let orderObject = {
       id: orderId,
-      purchasePrice: orderData.avgPurchasePrice,
+      avgPurchasePrice: orderData.avgPurchasePrice,
       quantity: orderData.quantity,
       buy: orderData.buy,
       salePrice: orderData.salePrice,
