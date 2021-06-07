@@ -19,11 +19,73 @@ firebase.auth().onAuthStateChanged(async function(user) {
     document.location.href = `index.html`
     })
 
-    // Create Position/Order Area
+    // Create Position/Order Area including previous orders
     let costBasis = 0
     let totalProceeds = 0
     let netReturns = 0
+    let userId = user.uid
 
+    // build URL for the current user's data
+    let dataPull = `/.netlify/functions/holdings?userId=${userId}`
+
+    // // Fetch the url, wait for a response, store the response in memory
+    let response = await fetch(dataPull)
+
+    // Fetch URL, wait for response, store in memory
+    let json = await response.json()
+
+    // write response to console
+    console.log(json)
+
+    // grab reference to previous orders section
+    let ordersDiv = document.querySelector(`#previousOrders`)
+
+    // loop through existing data
+    for (let i = 0; i < json.length; i++) {
+      let order = json[i]
+
+      // insert data into orders table
+      ordersDiv.insertAdjacentHTML(`beforeend`,`
+          <tr style="text-align:center">
+            <td class="table-cell center" id="ticker-table-cell">${order.ticker}</td>
+            <td class="table-cell" id="company-name-table-cell">${order.companyName}</td>
+            <td class="table-cell" id="transaction-date-table-cell">${order.transactionDate}</td>
+            <td class="table-cell" id="transaction-price-table-cell">${order.avgPurchasePrice}</td>
+            <td class="table-cell" id="quantity-table-cell">${order.quantity}</td>
+            <td class="table-cell" id="order-type-table-cell">${order.buy}</td>
+            <td class="table-cell" id="sale-price-table-cell">${order.salePrice}</td>
+          </tr>
+      </div>
+      `)
+     
+      costBasis = costBasis + order.quantity*order.avgPurchasePrice
+      totalProceeds = totalProceeds + order.quantity*order.salePrice
+      netReturns = totalProceeds - costBasis
+     
+      //replace return divs with info above
+
+      let costBasisHTML = document.querySelector('.costBasis')
+      costBasisHTML.innerHTML = `
+      <div class="costBasis"> 
+      Total Investment Amount ($) = ${costBasis}
+      </div>
+      `
+      let totalProceedsHTML = document.querySelector('.totalProceeds')
+      totalProceedsHTML.innerHTML = `
+      <div class="totalProceeds"> 
+      Total Proceeds from Investments ($) = ${totalProceeds}
+      </div>
+      `
+
+      let netReturnsHTML = document.querySelector('.netReturns')
+      netReturnsHTML.innerHTML = `
+      <div class="netReturns"> 
+      Net Returns ($) = ${netReturns}
+      </div>
+      `
+    }
+    // Add position section below       
+    
     // get a reference to the Add Position button
     let addPositionButton = document.querySelector(`#add-position-button`)
 
@@ -31,110 +93,31 @@ firebase.auth().onAuthStateChanged(async function(user) {
     addPositionButton.addEventListener(`click` , async function(event) {
       // ignore the default behavior
       event.preventDefault()
-      // console.log(event)
 
       // get a reference to the newly position input
       let positionInput = document.querySelector(`#positionInput`)
       // console.log(positionInput)
 
-      // get the contents on the inputs
+      // // get the contents on the inputs
       let ticker = positionInput.ticker.value
-      let userId = user.uid
       let companyName = positionInput.companyName.value
       let transactionDate = positionInput.transactionDate.value
       let avgPurchasePrice = positionInput.avgPurchasePrice.value
       let quantity = positionInput.quantity.value
       let buy = positionInput.buy.value
       let salePrice = positionInput.salePrice.value
-      //console.log(ticker)
-     
+
       // Build the URL for our order API
-      //let url = `/.netlify/functions/create_holding?ticker=${ticker}&userId=${userId}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
-      //console.log(url)
-      let url = `/.netlify/functions/holdings?userId=${userId}`
+      let url = `/.netlify/functions/create_holding?ticker=${ticker}&userId=${userId}&companyName=${companyName}&transactionDate=${transactionDate}&avgPurchasePrice=${avgPurchasePrice}&quantity=${quantity}&buy=${buy}&salePrice=${salePrice}`
 
-      // // Fetch the url, wait for a response, store the response in memory
-      let response = await fetch(url)
+      let urlResponse = await fetch(url)
 
-      let json = await response.json()
-      //console.log(json)
-      
-      // grab reference to previous order area
-      let ordersDiv = document.querySelector(`#previousOrders`)
-
-      //Loop through JSON data for each object 
-
-      for (let i = 0; i < json.length; i++) {
-        let order = json[i]
-
-        ordersDiv.insertAdjacentHTML(`beforeend`,`
-        <div class="table-row holding">
-        <!-- Fill in orders with backend below, example shown here as reference only -->
-            <tr style="text-align:center">
-              <td class="table-cell center" id="ticker-table-cell">${order.ticker}</td>
-              <td class="table-cell" id="company-name-table-cell">${order.companyName}</td>
-              <td class="table-cell" id="transaction-date-table-cell">${order.transactionDate}</td>
-              <td class="table-cell" id="transaction-price-table-cell">${order.avgPurchasePrice}</td>
-              <td class="table-cell" id="quantity-table-cell">${order.quantity}</td>
-              <td class="table-cell" id="order-type-table-cell">${order.buy}</td>
-              <td class="table-cell" id="sale-price-table-cell">${order.salePrice}</td>
-            </tr>
-        </div>
-        `)
-
-       // conditional for buy order, no sell
-        if (isNaN(order.avgPurchasePrice) == false && order.quantity > 0 && isNaN(order.costBasis) == false) {
-          costBasis = order.costBasis + order.quantity*order.avgPurchasePrice
-        }
-
-        //conditional for sell order, no buy
-        if (isNaN(salePrice) == false && order.quantity > 0 && isNaN(order.avgPurchasePrice) == true) {
-          totalProceeds = totalProceeds + order.quantity*salePrice
-        }
-
-        // conditional for buy and sell in same order
-
-        if (isNaN(salePrice) == false && salePrice > 0 && order.quantity > 0 && isNaN(order.avgPurchasePrice) == false) {
-          costBasis = order.costBasis + order.quantity*order.avgPurchasePrice
-          totalProceeds = totalProceeds + order.quantity*salePrice
-        }
-        
-        netReturns = totalProceeds - costBasis
-        //replace return divs with info above
-
-        let costBasisHTML = document.querySelector('.costBasis')
-        costBasisHTML.innerHTML = `
-        <div class="costBasis"> 
-        Total Investment Amount ($) = ${costBasis}
-        </div>
-        `
-        let totalProceedsHTML = document.querySelector('.totalProceeds')
-        totalProceedsHTML.innerHTML = `
-        <div class="totalProceeds"> 
-        Total Proceeds from Investments ($) = ${totalProceeds}
-        </div>
-        `
-
-        let netReturnsHTML = document.querySelector('.netReturns')
-        netReturnsHTML.innerHTML = `
-        <div class="netReturns"> 
-        Net Returns ($) = ${netReturns}
-        </div>
-        `
-      }
+      // refresh page
+      location.reload()
 
       }
 
-      //create some markup, insert data into the area
-      
-      
 
-    // //End create position / order area
-
-    // YTD performance calculations code goes here, need to loop through table and make calculations
-
-
-     
   )
   } else {
     // Signed out
