@@ -8,4 +8,4 @@ The content of this file is to be replaced by information on your final project,
 
 An interface that aggregates all of a user's investments on different platforms to one dashboard. Allow users to select stock tickers, cryptocurrencies, restricted company stock, enter cost basis, then monitor performance over time from one place.
 
-Max Leonard, Rob Desio, Jordan Cooper
+Max Leonard, Rob Desio, Jordon Cooper
