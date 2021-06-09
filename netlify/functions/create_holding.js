@@ -18,6 +18,7 @@ exports.handler = async function(event) {
   
     // establish a connection to firebase in memory
     let db = firebase.firestore()
+    
     let returnValue = {
       ticker: ticker,
       userId: userId, 
@@ -34,7 +35,8 @@ exports.handler = async function(event) {
 
     return {
       statusCode: 200,
-      body: returnValue
+      body: JSON.stringify(returnValue)
+
     }
   }
   
