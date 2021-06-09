@@ -18,22 +18,23 @@ exports.handler = async function(event) {
   
     // establish a connection to firebase in memory
     let db = firebase.firestore()
-  
+    let returnValue = {
+      ticker: ticker,
+      userId: userId, 
+      companyName: companyName,
+      transactionDate: transactionDate,
+      avgPurchasePrice: avgPurchasePrice,
+      quantity: quantity,
+      buy: buy,
+      salePrice: salePrice,
+      created: firebase.firestore.FieldValue.serverTimestamp()
+  }
         // create a new holding
-        db.collection(`order`).add({
-            ticker: ticker,
-            userId: userId, 
-            companyName: companyName,
-            transactionDate: transactionDate,
-            avgPurchasePrice: avgPurchasePrice,
-            quantity: quantity,
-            buy: buy,
-            salePrice: salePrice,
-            created: firebase.firestore.FieldValue.serverTimestamp()
-        })
+        db.collection(`order`).add(returnValue)
 
     return {
-      statusCode: 200
+      statusCode: 200,
+      body: returnValue
     }
   }
   
