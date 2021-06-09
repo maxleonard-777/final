@@ -31,7 +31,7 @@ exports.handler = async function(event) {
       created: firebase.firestore.FieldValue.serverTimestamp()
   }
         // create a new holding
-        db.collection(`order`).add(returnValue)
+        await db.collection(`order`).add(returnValue)
 
     return {
       statusCode: 200,
